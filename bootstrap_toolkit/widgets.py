@@ -64,13 +64,13 @@ def get_locale_js_url(lang):
 
 class BootstrapUneditableInput(forms.TextInput):
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
             attrs = {}
         attrs['type'] = 'hidden'
         klass = add_to_css_class(self.attrs.pop('class', ''), 'uneditable-input')
         klass = add_to_css_class(klass, attrs.pop('class', ''))
-        base = super(BootstrapUneditableInput, self).render(name, value, attrs)
+        base = super(BootstrapUneditableInput, self).render(name, value, attrs, renderer)
         return mark_safe(base + u'<span class="%s">%s</span>' % (klass, conditional_escape(value)))
 
 
@@ -117,7 +117,7 @@ class BootstrapDateInput(forms.DateInput):
         }
         return forms.Media(css=css, js=js)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         date_input_attrs = {}
         if attrs:
             date_input_attrs.update(attrs)
@@ -129,4 +129,4 @@ class BootstrapDateInput(forms.DateInput):
             'data-date-language': get_language(),
             'data-bootstrap-widget': 'datepicker',
         })
-        return super(BootstrapDateInput, self).render(name, value, attrs=date_input_attrs)
+        return super(BootstrapDateInput, self).render(name, value, attrs=date_input_attrs, renderer=renderer)
